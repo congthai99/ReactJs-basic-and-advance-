@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './Nav.scss'
 
 const Nav = () => {
@@ -10,6 +10,7 @@ const Nav = () => {
             <NavLink to="/classComponent">ClassComponent</NavLink>
             <NavLink to="/useReducer">ByUseReducer</NavLink>
             <NavLink to="/redux">ByRedux</NavLink>
+            <NavLink to="/calculator">Calculator</NavLink>
         </div>
     )
 }

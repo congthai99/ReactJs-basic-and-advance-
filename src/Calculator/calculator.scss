@@ -1,0 +1,133 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .calculator {
+        width: 332px;
+        margin-top: 50px;
+        border: 2px solid #47476b;
+        padding: 5px;
+        background: black;
+        .calculator-input {
+            padding: 8px 0;
+            .input {
+                width: 99%;
+                padding: 10px 0;
+                font-size: 20px;
+            }
+        }
+        .calculator-keys {
+            display: flex;
+            background-color: var(--main-background-color);
+            .btn-left {
+                display: flex;
+                flex-wrap: wrap;
+                width: 60%;
+                margin-left: 4px;
+                .btn-calculator-clear {
+                    display: inline-block;
+                    border-radius: 5px;
+                    background-color: var(--main-color);
+                    border: none;
+                    color: #FFFFFF;
+                    text-align: center;
+                    width: 151px;
+                    font-size: 22px;
+                    padding: 2px 20px;
+                    transition: all 0.5s;
+                    cursor: pointer;
+                }
+                .btn-calculator {
+                    display: inline-block;
+                    border-radius: 5px;
+                    background-color: var(--main-color);
+                    border: none;
+                    color: #FFFFFF;
+                    text-align: center;
+                    width: 70px;
+                    font-size: 22px;
+                    padding: 2px 20px;
+                    transition: all 0.5s;
+                    cursor: pointer;
+                }
+                .btn-calculator-zero {
+                    display: inline-block;
+                    border-radius: 5px;
+                    background-color: var(--main-color);
+                    border: none;
+                    color: #FFFFFF;
+                    text-align: center;
+                    width: 151px;
+                    font-size: 22px;
+                    padding: 2px 20px;
+                    transition: all 0.5s;
+                    cursor: pointer;
+                }
+            }
+            .btn-right {
+                display: flex;
+                margin-right: 2px;
+                .btn-col-left {
+                    .btn-calculator-dot {
+                        display: block;
+                        border-radius: 5px;
+                        background-color: var(--main-color);
+                        border: none;
+                        color: #FFFFFF;
+                        text-align: center;
+                        width: 70px;
+                        font-size: 22px;
+                        padding: 2px 20px;
+                        transition: all 0.5s;
+                        cursor: pointer;
+                        margin-left: 7px;
+                    }
+                    .btn-calculator {
+                        display: inline-block;
+                        border-radius: 5px;
+                        background-color: var(--main-color);
+                        border: none;
+                        color: #FFFFFF;
+                        text-align: center;
+                        width: 70px;
+                        font-size: 22px;
+                        padding: 2px 20px;
+                        transition: all 0.5s;
+                        cursor: pointer;
+                    }
+                }
+                .btn-col-right {
+                    display: flex;
+                    flex-direction: column;
+                    .btn-calculator-result {
+                        display: inline-block;
+                        border-radius: 5px;
+                        background-color: var(--main-color);
+                        border: none;
+                        color: #FFFFFF;
+                        text-align: center;
+                        width: 70px;
+                        height: 70px;
+                        font-size: 22px;
+                        padding: 2px 20px;
+                        transition: all 0.5s;
+                        cursor: pointer;
+                    }
+                    .btn-calculator {
+                        display: inline-block;
+                        border-radius: 5px;
+                        background-color: var(--main-color);
+                        border: none;
+                        color: #FFFFFF;
+                        text-align: center;
+                        width: 70px;
+                        font-size: 22px;
+                        padding: 2px 20px;
+                        transition: all 0.5s;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}
