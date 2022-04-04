@@ -11,6 +11,7 @@ const Nav = () => {
       <NavLink to="/useReducer">ByUseReducer</NavLink>
       <NavLink to="/redux">ByRedux</NavLink>
       <NavLink to="/calculator">Calculator</NavLink>
+      <NavLink to="/CalculatorUseReducer">CalculatorUseReducer</NavLink>
     </div>
   );
 };

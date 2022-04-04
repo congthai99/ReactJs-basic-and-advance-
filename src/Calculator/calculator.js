@@ -1,14 +1,48 @@
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import "./calculator.scss";
 
 const Calculator = () => {
   const [result, setResult] = useState("");
-
-  // Click one button
+  // Click one button and check max input
   const handleOnClick = (e) => {
-    setResult((result) =>
-      result.length <= 25 ? result.concat(e.target.name) : result
-    );
+    if (
+      (["/", "-", "*", "+"].includes(e.target.name) && result.length > 0) ||
+      !["/", "-", "*", "+"].includes(e.target.name)
+    ) {
+      if (result.length <= 25) {
+        const reg = /\/|\*|\+|-$/g;
+        const reg2 = /^[\/|\*|\+|-]/g;
+        if (!reg.test(result) || !reg2.test(e.target.name)) {
+          setResult((result) => {
+            return result.concat(e.target.name);
+          });
+        } else {
+          if (
+            ["/", "-", "*", "+"].includes(result[result.length - 1]) &&
+            result[result.length - 1] !== e.target.name
+          ) {
+            let str = result.replace(
+              new RegExp(/(\/|\*|\+|-)$/),
+              e.target.name
+            );
+            console.log(str);
+            setResult(str);
+          }
+
+          if (
+            ["/", "-", "*", "+"].includes(e.target.name) &&
+            !["/", "-", "*", "+"].includes(result[result.length - 1])
+          ) {
+            setResult((result) => result.concat(e.target.name));
+          }
+        }
+      } else {
+        setResult("error");
+        setTimeout(() => {
+          setResult("");
+        }, 1000);
+      }
+    }
   };
 
   // Clear all result
@@ -28,7 +62,10 @@ const Calculator = () => {
         setResult(eval(result).toString());
       }
     } catch (err) {
-      setResult("Error");
+      setResult("error");
+      setTimeout(() => {
+        setResult("");
+      }, 1000);
     }
   };
 
