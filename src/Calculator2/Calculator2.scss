@@ -1,4 +1,4 @@
-.container {
+.container-calculator2 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,6 +15,7 @@
             width: 100%;
             font-size: 25px;
             padding: 5px 0;
+            line-height: 25px;
         }
         .keys {
             display: grid;

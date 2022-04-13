@@ -1,63 +1,136 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer } from "react";
 import "./Calculator2.scss";
 
 const initialState = {
-  operator: ["+", "-"],
-  calculate: "",
+  formula: "",
+  currentSign: "",
 };
 
 function reducer(state, action) {
-  const { calculate, operator } = state;
-  console.log("calculate:", calculate);
+  const { currentSign, formula } = state;
   switch (action.type) {
-    case "handleOnClickButton":
-      return {
-        calculate: state.calculate.concat(action.payload),
-      };
-
-    case "handleClear":
-      return { calculate: "" };
-
-    case "handleOnClickButtonPlus":
-      const reg = /d\/|\*|\+|$/g;
-      if (state.calculate > 0 || state.calculate == "") {
+    case "handleOnClickNumber":
+      if (currentSign.length <= 20 && formula.length <= 20) {
+        if (
+          ["/", "-", "*", "+"].includes(currentSign[currentSign.length - 1])
+        ) {
+          return {
+            formula: formula.concat(action.payload),
+            currentSign: action.payload,
+          };
+        } else if (["0"].includes(currentSign[currentSign.length - 1])) {
+          return {
+            formula: action.payload,
+            currentSign: action.payload,
+          };
+        } else {
+          return {
+            formula: formula.concat(action.payload),
+            currentSign: currentSign.concat(action.payload),
+          };
+        }
+      } else {
         return {
-          calculate: state.calculate.concat(action.payload),
+          formula: formula,
+          currentSign: "Full",
         };
-      } else if (action.payload == "+" && state.calculate > 0) {
-        return { calculate: "+" };
       }
 
-    case "handleOnClickButtonDash":
-      return {
-        calculate: state.calculate.concat(action.payload),
-      };
+    case "handleOnClickPOperators":
+      if (
+        ["/", "-", "*", "+"].includes(formula[formula.length - 1]) &&
+        ["/", "-", "*", "+"].includes(action.payload)
+      ) {
+        if (
+          ["/", "*", "+", "-"].includes(formula[formula.length - 1]) &&
+          formula[formula.length - 1] !== action.payload
+        ) {
+          let newFormula = formula.replace(
+            new RegExp(/(\/|\*|\+|-)$/),
+            action.payload
+          );
+          return {
+            formula: newFormula,
+            currentSign: action.payload,
+          };
+        } else {
+          return {
+            formula: formula,
+            currentSign: action.payload,
+          };
+        }
+      } else {
+        return {
+          formula: state.formula.concat(action.payload),
+          currentSign: action.payload,
+        };
+      }
 
-    case "handleBackSpace":
-      return { calculate: calculate.slice(0, -1) };
+    case "handleOnClickDot":
+      console.log(action.payload);
+      if (
+        ["."].includes(currentSign[currentSign.length - 1]) &&
+        ["."].includes(action.payload)
+      ) {
+        return {
+          formula: formula,
+          currentSign: currentSign,
+        };
+      } else if (currentSign === "") {
+        const newFormula = "0".concat(action.payload);
+        return {
+          formula: newFormula,
+          currentSign: newFormula,
+        };
+      } else if (currentSign !== "") {
+        return {
+          formula: formula.concat(action.payload),
+          currentSign: currentSign.concat(action.payload),
+        };
+      }
 
     case "handleResult":
       try {
-        if (!calculate.endsWith("/0")) {
-          return { calculate: eval(calculate).toString() };
+        if (!formula.endsWith("/0")) {
+          return {
+            formula: eval(formula).toString(),
+            currentSign: eval(formula).toString(),
+          };
+        }
+      } catch (error) {
+        return state;
+      }
+
+    case "handleClear":
+      return {
+        currentSign: "",
+        formula: "",
+      };
+
+    case "handleBackSpace":
+      return { currentSign: currentSign.slice(0, -1) };
+
+    case "handleResult":
+      try {
+        if (!currentSign.endsWith("/0")) {
+          return { currentSign: eval(currentSign).toString() };
         }
       } catch (error) {
         return state;
       }
     default:
-      throw Error(error.message);
+      return state;
   }
-
-  return state;
 }
 
 function CalculatorUseReducer() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <div className="container">
+    <div className="container-calculator2">
       <div className="calculator2">
-        <div className="input">{state.calculate || "0"}</div>
+        <div className="input">{state.formula || ""}</div>
+        <div className="input">{state.currentSign || "0"}</div>
         <div className="keys">
           <button
             className="btn-clear"
@@ -65,19 +138,24 @@ function CalculatorUseReducer() {
           >
             AC
           </button>
-          <button onClick={() => dispatch({ type: "handleBackSpace" })}>
+          <button
+            style={{ backgroundColor: "rgb(102,102,102)" }}
+            onClick={() => dispatch({ type: "handleBackSpace" })}
+          >
             c
           </button>
           <button
+            style={{ backgroundColor: "rgb(102,102,102)" }}
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "/" })
+              dispatch({ type: "handleOnClickPOperators", payload: "/" })
             }
           >
             &divide;
           </button>
           <button
+            style={{ backgroundColor: "rgb(102,102,102)" }}
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "*" })
+              dispatch({ type: "handleOnClickPOperators", payload: "*" })
             }
           >
             &times;
@@ -85,77 +163,79 @@ function CalculatorUseReducer() {
 
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "7" })
+              dispatch({ type: "handleOnClickNumber", payload: "7" })
             }
           >
             7
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "8" })
+              dispatch({ type: "handleOnClickNumber", payload: "8" })
             }
           >
             8
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "9" })
+              dispatch({ type: "handleOnClickNumber", payload: "9" })
             }
           >
             9
           </button>
           <button
+            style={{ backgroundColor: "rgb(102,102,102)" }}
             onClick={() =>
-              dispatch({ type: "handleOnClickButtonDash", payload: "-" })
+              dispatch({ type: "handleOnClickPOperators", payload: "-" })
             }
           >
             &ndash;
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "4" })
+              dispatch({ type: "handleOnClickNumber", payload: "4" })
             }
           >
             4
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "5" })
+              dispatch({ type: "handleOnClickNumber", payload: "5" })
             }
           >
             5
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "6" })
+              dispatch({ type: "handleOnClickNumber", payload: "6" })
             }
           >
             6
           </button>
           <button
+            style={{ backgroundColor: "rgb(102,102,102)" }}
             onClick={() =>
-              dispatch({ type: "handleOnClickButtonPlus", payload: "+" })
+              dispatch({ type: "handleOnClickPOperators", payload: "+" })
             }
           >
             +
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "1" })
+              dispatch({ type: "handleOnClickNumber", payload: "1" })
             }
           >
             1
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "2" })
+              dispatch({ type: "handleOnClickNumber", payload: "2" })
             }
           >
             2
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "3" })
+              dispatch({ type: "handleOnClickNumber", payload: "3" })
             }
           >
             3
@@ -168,16 +248,14 @@ function CalculatorUseReducer() {
           </button>
           <button
             onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "0" })
+              dispatch({ type: "handleOnClickNumber", payload: "0" })
             }
             className="btn-zero"
           >
             0
           </button>
           <button
-            onClick={() =>
-              dispatch({ type: "handleOnClickButton", payload: "." })
-            }
+            onClick={() => dispatch({ type: "handleOnClickDot", payload: "." })}
           >
             .
           </button>
